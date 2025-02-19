@@ -5,8 +5,8 @@ import geoip from "geoip-lite";
 
 import { sendSuccessResponseWithoutList } from "../heplers";
 import AppError, { SendErrorResponse } from "../heplers/appError";
-import { signedUrl } from "../heplers/aws.service";
 import catchAsync from "../heplers/catchAsync";
+import { signedUrl } from "../heplers/do.service";
 import { prisma } from "../prisma";
 import { UserRepository } from "../repository/user.repositiry";
 

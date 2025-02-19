@@ -3,7 +3,7 @@ import multer, { memoryStorage } from "multer";
 
 import adminBroadcastRouter from "./admin/broadcast";
 import { AdminController } from "../controller/admin.controller";
-import { AWSController } from "../controller/aws.controller";
+import { DOController } from "../controller/aws.controller";
 import { EductionTaskController } from "../controller/eductionTask.controller";
 import { TaskController } from "../controller/task.controller";
 import { UserController } from "../controller/users.controller";
@@ -30,7 +30,7 @@ router.post("/educationTask/update", verifyJwtToken, EductionTaskController.upda
 
 router.post("/educationTask/delete", verifyJwtToken, EductionTaskController.deleteTask);
 
-router.post("/file/upload", upload.single("file"), verifyJwtToken, AWSController.fileUpload);
+router.post("/file/upload", upload.single("file"), verifyJwtToken, DOController.fileUpload);
 
 router.post("/user/ranking", verifyJwtToken, UserController.userList);
 
