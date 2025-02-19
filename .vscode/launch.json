@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "bitopex backend",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "dev"],
+      "cwd": "${workspaceRoot}",
+      "runtimeVersion": "20",
+      "skipFiles": ["<node_internals>/**/*.js", "node_modules/**/*.js"]
+    }
+  ]
+}

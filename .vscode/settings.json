@@ -1,0 +1,14 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  },
+  "eslint.validate": ["javascript", "typescript"],
+  // "editor.formatOnSave": true,
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
+  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "cSpell.words": [
+    "geoip"
+  ]
+}

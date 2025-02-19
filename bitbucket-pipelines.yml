@@ -1,0 +1,33 @@
+image: node:20
+
+pipelines:
+  branches:
+    dev:
+      - step:
+          name: Deploy to Development Server
+          deployment: test
+          script:
+            - echo Installing dependencies
+            - npm install
+            - echo Building dist
+            - npm run build
+            - echo Copying code to server
+            - pipe: atlassian/scp-deploy:1.4.1
+              variables:
+                USER: 'ubuntu'
+                SERVER: '52.57.148.136'
+                LOCAL_PATH: 'dist'
+                REMOTE_PATH: '/var/www/html/backend'
+                EXTRA_ARGS: '-o IdentitiesOnly=yes'
+                DEBUG: 'true'
+            - echo Restarting backend services
+            - pipe: atlassian/ssh-run:0.8.0
+              variables:
+                SSH_USER: 'ubuntu'
+                SERVER: '52.57.148.136'
+                COMMAND: 'source /home/ubuntu/.nvm/nvm.sh && cd /var/www/html/backend/dist && npm install && pm2 startOrRestart ecosystem.config.cjs --only dev'
+                EXTRA_ARGS: '-o IdentitiesOnly=yes'
+                DEBUG: 'true'
+            - echo Backend server restarted
+            - echo bye
+    
