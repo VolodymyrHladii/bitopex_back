@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum ContentType {
+  Message
+  Photo
+  Video
+  Sticker
+  Animation
+}
+
+enum MessageFrom {
+  Telegram
+  Admin
+}
+
+model users {
+  id                           Int               @id @default(autoincrement())
+  user_id                      String            @unique @db.VarChar(191)
+  auth_token                   String?
+  avatar                       String?
+  balance                      Int               @default(0)
+  date_register                DateTime
+  energy                       Int               @default(1000)
+  language_code                String
+  exchange_coin                String            @default("")
+  login                        String
+  wallet_address               String            @default("")
+  bonus                        Int               @default(0)
+  is_bonus_taken               Boolean           @default(false)
+  referals                     referals[]
+  tasks                        tasks[]
+  last_energy_updated_at       DateTime          @default(now())
+  full_energy_available        Int               @default(3)
+  last_full_energy_updated_at  DateTime          @default(now())
+  last_daily_reward_claimed_at DateTime          @default(now())
+  active_daily_reward          Int               @default(0)
+  user_level_id                Int               @default(1)
+  boost_level_id               Int               @default(1)
+  energy_level_id              Int               @default(1)
+  background_sound             Boolean           @default(false)
+  sound_effects                Boolean           @default(false)
+  intro_seen                   Boolean           @default(false)
+  is_premium                   Boolean           @default(false)
+  // user_level                   levels     @relation("UserLevel", fields: [user_level_id], references: [id])
+  // boost_level                  levels     @relation("BoostLevel", fields: [boost_level_id], references: [id])
+  // energy_level                 levels     @relation("EnergyLevel", fields: [energy_level_id], references: [id])
+  airDropUserClaim             airDropUserClaim?
+  countryCode                  String?
+  register                     Int               @default(0) @db.TinyInt
+  newRegister                  Int               @default(0) @db.TinyInt
+  eductionTasks                eductionTasks[]
+  createdAt                    DateTime          @default(now())
+}
+
+model referals {
+  id              Int    @id @default(autoincrement())
+  user_id         String @unique @db.VarChar(191)
+  users           users  @relation(fields: [user_id_referal], references: [user_id])
+  user_id_referal String @db.VarChar(191)
+  bonus           Int?
+}
+
+model tasks {
+  id          Int         @id @default(autoincrement())
+  users       users       @relation(fields: [user_id], references: [user_id])
+  user_id     String
+  taskDetails taskDetails @relation(fields: [task_id], references: [id])
+  task_id     Int
+  is_claimed  Boolean     @default(false)
+}
+
+model eductionTasks {
+  id                  Int                 @id @default(autoincrement())
+  users               users               @relation(fields: [user_id], references: [user_id])
+  user_id             String
+  eductionTaskDetails eductionTaskDetails @relation(fields: [eduction_task_id], references: [id])
+  eduction_task_id    Int
+  is_claimed          Boolean             @default(false)
+}
+
+model levels {
+  id            Int    @id @default(autoincrement())
+  boost         Int    @default(1)
+  energy        Int    @default(1000)
+  boost_balance Int    @default(0)
+  user_balance  Int    @default(0)
+  name          String @default("")
+  // users         users[] @relation("UserLevel")
+  // boost_users   users[] @relation("BoostLevel")
+  // energy_users  users[] @relation("EnergyLevel")
+}
+
+model taskDetails {
+  id                 Int     @id @default(autoincrement())
+  title              String
+  link               String
+  task               tasks[]
+  count              Int?
+  bonus              Int     @default(1000)
+  is_deleted         Boolean @default(false)
+  type               String  @default("")
+  image              String  @default("")
+  performable_action String  @default("")
+  order              Int     @default(0)
+}
+
+enum EDUCTION_TASK_TYPE {
+  beginner
+  intermediate
+  advance
+}
+
+model eductionTaskDetails {
+  id                 Int                @id @default(autoincrement())
+  title              String
+  link               String
+  educationTask      eductionTasks[]
+  count              Int?
+  bonus              Int                @default(1000)
+  is_deleted         Boolean            @default(false)
+  type               EDUCTION_TASK_TYPE @default(beginner)
+  image              String             @default("")
+  performable_action String             @default("")
+  order              Int                @default(0)
+}
+
+model dailyReward {
+  id         Int     @id @default(autoincrement())
+  day        Int
+  reward     Int
+  is_deleted Boolean @default(false)
+}
+
+model admin {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+}
+
+model airDropUserClaim {
+  id                      Int      @id @default(autoincrement())
+  user_id                 String   @unique
+  users                   users    @relation(fields: [user_id], references: [user_id])
+  is_transaction_complete Boolean  @default(false)
+  created_at              DateTime @default(now())
+}
+
+model channelMessages {
+  id           Int          @id @default(autoincrement())
+  message_id   Int?
+  channel_post Json?
+  status       Int          @default(0) // 0 for pending, 1 for processing, 2 for completed
+  content      String?      @db.LongText
+  created_at   DateTime     @default(now())
+  is_deleted   Boolean      @default(false)
+  contentType  ContentType?
+  url          String?
+  messageFrom  MessageFrom
+  offset       Int          @default(0)
+  buttonText   String?
+  buttonLink   String?      @db.Text
+}
