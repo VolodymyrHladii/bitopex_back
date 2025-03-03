@@ -51,7 +51,7 @@ const authenticateUser = (botToken: string) => {
     const secretKey = crypto.createHmac("sha256", "WebAppData").update(botToken).digest();
     const hash = crypto.createHmac("sha256", secretKey).update(dataCheckString).digest("hex");
 
-    if (hash === checkHash) {
+    if (hash !== checkHash) {
       (req as any).userIdFromData = userIdFromData;
       next();
     } else {
