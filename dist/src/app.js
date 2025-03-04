@@ -60,11 +60,11 @@ app.use((0, cors_1.default)({
                 callback(null, true);
             }
             else {
-                callback(null, true);
+                callback(new Error("Not allowed by CORS"));
             }
         }
         catch (error) {
-            callback(null, true);
+            callback(new Error("Not allowed by CORS"));
         }
     },
 }));

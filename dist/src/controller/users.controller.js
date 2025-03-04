@@ -230,7 +230,6 @@ UserController.saveUserBalance = (0, catchAsync_1.default)(async (req, res, next
         });
         const amount = req.body.amount;
         if (isNaN(amount)) {
-            console.log("amount", amount);
             return (0, appError_1.SendErrorResponse)(res, "Invalid amount", null, 400, "Error");
         }
         const energyReceived = 32;
@@ -264,12 +263,10 @@ UserController.saveUserBalance = (0, catchAsync_1.default)(async (req, res, next
             return (0, heplers_1.sendSuccessResponseWithoutList)(res, user, 200, "user balance updated successfully");
         }
         else {
-            console.log("User not found", null, 400, "Error");
             return (0, appError_1.SendErrorResponse)(res, "User not found", null, 400, "Error");
         }
     }
     catch (error) {
-        console.log("ERROR1", error);
         next(new appError_1.default(error.message ?? "Internal Server Error", error.status ?? 500));
     }
 });

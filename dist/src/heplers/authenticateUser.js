@@ -40,7 +40,7 @@ const authenticateUser = (botToken) => {
         const dataCheckString = filteredDataCheckArr.join("\n");
         const secretKey = crypto_1.default.createHmac("sha256", "WebAppData").update(botToken).digest();
         const hash = crypto_1.default.createHmac("sha256", secretKey).update(dataCheckString).digest("hex");
-        if (hash !== checkHash) {
+        if (hash === checkHash) {
             req.userIdFromData = userIdFromData;
             next();
         }
