@@ -269,6 +269,7 @@ UserController.saveUserBalance = (0, catchAsync_1.default)(async (req, res, next
         }
     }
     catch (error) {
+        console.log("ERROR1", error);
         next(new appError_1.default(error.message ?? "Internal Server Error", error.status ?? 500));
     }
 });
